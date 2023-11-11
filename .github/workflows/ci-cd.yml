@@ -11,6 +11,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ec2-51-20-119-184.eu-north-1.compute.amazonaws.com >> ~/.ssh/known_hosts
+
       - name: Install Node.js
         uses: actions/setup-node@v2
         with:
@@ -19,16 +26,15 @@ jobs:
       - name: Check Node.js version
         run: node -v
 
+      - name: Deploy to EC2
+        run: |
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ubuntu@ec2-51-20-119-184.eu-north-1.compute.amazonaws.com "cd laif-backend && git pull"
+      
       - name: Install dependencies
         run: npm install
 
-      - name: Set up SSH key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ec2-51-20-119-184.eu-north-1.compute.amazonaws.com >> ~/.ssh/known_hosts
+      - name: Build typescript
+        run: npm run build
 
-      - name: Deploy to EC2
-        run: |
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ubuntu@ec2-51-20-119-184.eu-north-1.compute.amazonaws.com "cd laif-backend && git pull && npm install && npm run build && pm2 startOrReload ecosystem.config.js"
+      - name:  Start server
+        run: pm2 startOrReload ecosystem.config.js
