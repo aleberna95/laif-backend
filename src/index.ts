@@ -8,7 +8,7 @@ app.use(express.json());
 
 // Esempio di endpoint
 app.get('/', (req, res) => {
-    res.send('Ciao Mondo!');
+    res.send('Hello world!');
 });
 
 app.listen(port, '0.0.0.0', () => {
