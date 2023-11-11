@@ -28,4 +28,4 @@ jobs:
 
       - name: Deploy to EC2
         run: |
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ubuntu@ec2-51-20-119-184.eu-north-1.compute.amazonaws.com "node -v cd laif-backend && git pull && npm install && npm run build && pm2 startOrReload ecosystem.config.js"
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ubuntu@ec2-51-20-119-184.eu-north-1.compute.amazonaws.com "source ~/.nvm/nvm.sh && node -v && cd laif-backend && git pull && npm install && npm run build && pm2 startOrReload ecosystem.config.js"
