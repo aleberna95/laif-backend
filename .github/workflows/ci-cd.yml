@@ -18,4 +18,4 @@ jobs:
       run: npm install
     - name: Deploy to EC2
       run: |
-        ssh -i "laif-backend-ec2.pem" ubuntu@ec2-51-20-119-184.eu-north-1.compute.amazonaws.com "cd /laif-backend && git pull && npm install && npm start"
+        ssh -i "laif-backend-ec2.pem" ubuntu@ec2-51-20-119-184.eu-north-1.compute.amazonaws.com "git pull && npm install && npm start"
