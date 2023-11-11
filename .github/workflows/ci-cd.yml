@@ -14,7 +14,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '20'
+          node-version: '20.9.0'
 
       - name: Install dependencies
         run: npm install
@@ -28,4 +28,4 @@ jobs:
 
       - name: Deploy to EC2
         run: |
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ubuntu@ec2-51-20-119-184.eu-north-1.compute.amazonaws.com "cd laif-backend && git pull && npm install && npm run build && pm2 restart backend"
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ubuntu@ec2-51-20-119-184.eu-north-1.compute.amazonaws.com "nvm install 20.9.0 && nvm use 20.9.0 && cd laif-backend && git pull && npm install && npm run build && pm2 restart backend"
