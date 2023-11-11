@@ -1,0 +1,23 @@
+name: Node.js CI/CD
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+    - name: Install dependencies
+      run: npm install
+    - name: Run tests
+      run: npm test
+    - name: Deploy to EC2
+      run: |
+        ssh -i "laif-backend-ec2.pem" ubuntu@ec2-51-20-119-184.eu-north-1.compute.amazonaws.com "cd /laif-backend && git pull && npm install && npm start"
